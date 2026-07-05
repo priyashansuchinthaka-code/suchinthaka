@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>M.A.S. PRIYASHAN | Cinematic Tech Portfolio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#0e1417",
+                    "primary-container": "#00d9ff",
+                    "on-secondary-fixed": "#20005f",
+                    "on-surface": "#dde4e6",
+                    "inverse-on-surface": "#2a3234",
+                    "tertiary-fixed-dim": "#00e290",
+                    "on-secondary-fixed-variant": "#4f00d0",
+                    "background": "#0e1417",
+                    "secondary": "#cdbdff",
+                    "surface-dim": "#0e1417",
+                    "error": "#ffb4ab",
+                    "tertiary-fixed": "#52ffac",
+                    "surface-tint": "#00d9ff",
+                    "on-primary-fixed": "#001f26",
+                    "outline-variant": "#3c494d",
+                    "outline": "#859398",
+                    "surface-container-high": "#242b2d",
+                    "primary-fixed": "#aeecff",
+                    "surface-variant": "#2f3638",
+                    "surface-container": "#1a2123",
+                    "primary": "#afecff",
+                    "error-container": "#93000a",
+                    "on-secondary-container": "#c0acff",
+                    "on-tertiary-container": "#005f3a",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed-dim": "#00d9ff",
+                    "on-tertiary": "#003920",
+                    "on-error": "#690005",
+                    "on-primary-container": "#005b6c",
+                    "on-background": "#dde4e6",
+                    "on-primary-fixed-variant": "#004e5d",
+                    "surface-bright": "#333a3d",
+                    "tertiary-container": "#00e391",
+                    "surface-container-low": "#161d1f",
+                    "secondary-fixed": "#e8deff",
+                    "secondary-container": "#5203d5",
+                    "on-tertiary-fixed": "#002111",
+                    "tertiary": "#58ffad",
+                    "secondary-fixed-dim": "#cdbdff",
+                    "on-surface-variant": "#bbc9ce",
+                    "inverse-surface": "#dde4e6",
+                    "on-tertiary-fixed-variant": "#005231",
+                    "surface-container-lowest": "#080f11",
+                    "on-primary": "#003641",
+                    "inverse-primary": "#00687b",
+                    "on-secondary": "#370096",
+                    "surface-container-highest": "#2f3638"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "margin-mobile": "20px",
+                    "gutter": "24px",
+                    "section-padding": "120px",
+                    "container-max": "1280px",
+                    "grid-unit": "8px"
+            },
+            "fontFamily": {
+                    "display-lg-mobile": ["Space Grotesk"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-lg": ["Space Grotesk"],
+                    "display-lg": ["Space Grotesk"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["JetBrains Mono"],
+                    "headline-md": ["Space Grotesk"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        :root {
+            --cursor-x: 0px;
+            --cursor-y: 0px;
+        }
+        body {
+            background-color: #080f11;
+            color: #dde4e6;
+            scroll-behavior: smooth;
+            cursor: none;
+        }
+
+        .cyber-grid-overlay {
+            background-image: 
+                linear-gradient(to right, rgba(0, 217, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 217, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .os-module {
+            background: rgba(22, 29, 31, 0.65);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 217, 255, 0.15);
+            border-radius: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .os-module:hover {
+            border-color: rgba(0, 217, 255, 0.4);
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.1);
+        }
+
+        .glare {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .os-module:hover .glare { opacity: 1; }
+
+        .custom-cursor {
+            width: 32px;
+            height: 32px;
+            border: 2px solid #00d9ff;
+            border-radius: 50%;
+            position: fixed;
+            left: var(--cursor-x);
+            top: var(--cursor-y);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: width 0.2s, height 0.2s;
+        }
+        .custom-cursor::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 4px; height: 4px;
+            background: #00d9ff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px #00d9ff;
+        }
+
+        .scroll-progress-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 3px;
+            background: rgba(255,255,255,0.05);
+            z-index: 101;
+        }
+        #scroll-progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, transparent, #00d9ff);
+            width: 0%;
+            box-shadow: 0 0 15px #00d9ff;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            filter: blur(10px);
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            filter: blur(0);
+        }
+
+        .magnetic { transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1); }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .terminal-text {
+            font-family: 'JetBrains Mono', monospace;
+            color: #00d9ff;
+            font-size: 0.75rem;
+        }
+
+        #hero-tilt-container {
+            transform-style: preserve-3d;
+        }
+    </style>
+</head>
+<body class="font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<div class="custom-cursor" id="cursor"></div>
+<div class="scroll-progress-container"><div id="scroll-progress-bar"></div></div>
+<!-- Background Layer -->
+<div class="fixed inset-0 z-[-1] overflow-hidden pointer-events-none">
+
+</div>
+<div class="fixed inset-0 z-[-1] cyber-grid-overlay pointer-events-none"></div>
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-surface-container-lowest/40 backdrop-blur-2xl border-b border-primary/10">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto w-full">
+<div class="flex items-center gap-4">
+<div class="relative group">
+<div class="absolute -inset-1 bg-primary/20 blur opacity-0 group-hover:opacity-100 transition-opacity"></div>
+<img alt="SP-ThinkHub Logo" class="h-10 w-10 object-contain relative" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcjtkvYnRn5h-fqDinAFPgs8HqsZ4US2F-cJDmDC_JAo-w-ohe35lzRvn7VNXMc9yWaJU7aunJKjGasIMxPVbmKxo-cSmj0NOXlROnt_pXJbwYn4yMNWWgq7KLVrafIQSE7VTShtIltPzNW89QbOi-Js_366q89JaK24ftzefEuHVgbBF_YZJe4GLu-kUSCUWDYu7cF1e0uT99jRuiy8FkeKCJY4egmaJ8gEnO20DlKr0xnXQI3VhTtWRjSYRsBFXKYA"/>
+</div>
+<span class="font-display-lg text-headline-md tracking-tighter text-on-background">PRIYASHAN<span class="text-primary">.SYS</span></span>
+</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-label-md text-primary font-bold border-b-2 border-primary py-1" href="#home">/root</a>
+<a class="font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#about">/about</a>
+<a class="font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#skills">/skills</a>
+<a class="font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#projects">/projects</a>
+<a class="font-label-md text-on-surface-variant hover:text-primary transition-colors" href="#youtube">/media</a>
+<button class="magnetic px-6 py-2 bg-primary text-on-primary font-label-md rounded-sm hover:brightness-110 transition-all shadow-[0_0_20px_rgba(0,217,255,0.3)]" onclick="window.location.href='#contact'">EXECUTE_HIRE</button>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-24 px-gutter max-w-container-max mx-auto overflow-visible reveal" id="home">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center w-full">
+<!-- Left Content -->
+<div class="lg:col-span-7 space-y-10">
+<div class="inline-flex items-center gap-3 px-4 py-1.5 bg-primary/5 border border-primary/20 rounded-full">
+<span class="status-dot bg-tertiary"></span>
+<span class="terminal-text uppercase tracking-widest">System Status: Optimal / Active</span>
+</div>
+<div class="space-y-2">
+<h1 class="font-display-lg text-[64px] md:text-[110px] text-on-background leading-[0.9] font-black tracking-tighter">
+                            M.A.S. <br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-fixed-dim drop-shadow-[0_0_30px_rgba(0,217,255,0.3)]">PRIYASHAN</span>
+</h1>
+</div>
+<div class="space-y-6">
+<p class="font-label-md text-primary text-xl border-l-2 border-primary pl-6">
+                            STUDENT // FREELANCER // HARDWARE ARCHITECT
+                        </p>
+<p class="font-body-lg text-on-surface-variant/80 max-w-xl leading-relaxed">
+                            Engineering the intersection of silicon and software. Specialist in high-performance embedded systems and full-stack web architectures.
+                        </p>
+</div>
+<div class="flex flex-wrap gap-6 pt-4">
+<button class="magnetic group relative px-10 py-5 bg-primary text-on-primary font-label-md rounded-sm overflow-hidden flex items-center gap-3">
+<span class="relative z-10">VIEW_REPOS</span>
+<span class="material-symbols-outlined relative z-10 group-hover:translate-x-1 transition-transform">terminal</span>
+<div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+</button>
+<button class="magnetic px-10 py-5 border border-primary/30 text-primary font-label-md rounded-sm hover:bg-primary/5 transition-all flex items-center gap-2">
+                            CONNECT_LINK
+                        </button>
+</div>
+</div>
+<!-- Right Side 3D -->
+<div class="lg:col-span-5 relative flex justify-center items-center h-[600px]">
+<div class="os-module w-full h-[550px] p-1 flex items-center justify-center bg-transparent border-none shadow-none" id="hero-tilt-container">
+<div class="absolute inset-0 z-0 bg-primary/5 blur-[100px] rounded-full animate-pulse"></div>
+<!-- Three.js Container -->
+<div class="w-full h-full relative z-10 cursor-pointer" id="threejs-container-HERO">
+<!-- JS will inject the threejs scene here -->
+</div>
+<div class="absolute bottom-10 left-10 p-6 glass-card border border-primary/20 backdrop-blur-md z-20 pointer-events-none">
+<p class="terminal-text mb-2">AUTH_ID: PRIYASHAN_X01</p>
+<div class="flex gap-1 h-8 items-end">
+<div class="w-1 bg-primary h-1/2 animate-bounce"></div>
+<div class="w-1 bg-primary h-full animate-bounce [animation-delay:0.2s]"></div>
+<div class="w-1 bg-primary h-2/3 animate-bounce [animation-delay:0.4s]"></div>
+<div class="w-1 bg-primary h-1/3 animate-bounce [animation-delay:0.1s]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Ecosystem Section -->
+<section class="py-section-padding px-gutter max-w-container-max mx-auto reveal" id="about">
+<div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-4">
+<div>
+<p class="terminal-text mb-4">MODULE_01: CORE_ECOSYSTEM</p>
+<h2 class="font-headline-lg text-on-background">FUNCTIONAL <span class="text-primary">ROLES</span></h2>
+</div>
+<div class="text-on-surface-variant font-label-sm border border-outline-variant p-2">VER: 1.0.4 // STABLE</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Role Card 1 -->
+<div class="os-module p-10 group">
+<div class="glare"></div>
+<div class="mb-10 w-16 h-16 rounded-sm bg-primary/10 border border-primary/30 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">school</span>
+</div>
+<h3 class="font-headline-md text-on-background mb-4">Academic Node</h3>
+<p class="font-body-md text-on-surface-variant leading-relaxed mb-10">
+                        Synthesizing fundamental principles in computer science and advanced electronics to drive innovation.
+                    </p>
+<div class="flex justify-between items-center mt-auto">
+<span class="terminal-text">INTELLECT_LEVEL: 98%</span>
+<span class="status-dot bg-primary"></span>
+</div>
+</div>
+<!-- Role Card 2 -->
+<div class="os-module p-10 group border-secondary/20">
+<div class="glare"></div>
+<div class="mb-10 w-16 h-16 rounded-sm bg-secondary/10 border border-secondary/30 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">work</span>
+</div>
+<h3 class="font-headline-md text-on-background mb-4">External Node</h3>
+<p class="font-body-md text-on-surface-variant leading-relaxed mb-10">
+                        Operating as a high-frequency freelancer, delivering custom engineering solutions across global timezones.
+                    </p>
+<div class="flex justify-between items-center mt-auto">
+<span class="terminal-text text-secondary">SATISFACTION_INDEX: MAX</span>
+<span class="status-dot bg-secondary"></span>
+</div>
+</div>
+<!-- Role Card 3 -->
+<div class="os-module p-10 group border-tertiary/20">
+<div class="glare"></div>
+<div class="mb-10 w-16 h-16 rounded-sm bg-tertiary/10 border border-tertiary/30 flex items-center justify-center text-tertiary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">memory</span>
+</div>
+<h3 class="font-headline-md text-on-background mb-4">Hardware Node</h3>
+<p class="font-body-md text-on-surface-variant leading-relaxed mb-10">
+                        Mastering the physical layer. Designing complex PCBs and embedded firmware for the IoT revolution.
+                    </p>
+<div class="flex justify-between items-center mt-auto">
+<span class="terminal-text text-tertiary">UPTIME: 99.9%</span>
+<span class="status-dot bg-tertiary"></span>
+</div>
+</div>
+</div>
+</section>
+<!-- Proficiency Section -->
+<section class="py-section-padding bg-surface-container-lowest/30 reveal" id="skills">
+<div class="px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-24">
+<p class="terminal-text mb-4 uppercase tracking-[0.3em]">Module_02: Technical_Proficiency</p>
+<h2 class="font-display-lg text-headline-lg text-on-background">THE <span class="text-primary">STACK</span></h2>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+<!-- Software Module -->
+<div class="os-module p-8 lg:p-12">
+<div class="flex justify-between items-center mb-10">
+<h4 class="font-headline-md text-primary">SOFTWARE_LAYER</h4>
+<span class="terminal-text">KERNEL_READY</span>
+</div>
+<div class="space-y-8">
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm uppercase"><span>Full Stack Dev</span><span>90%</span></div>
+<div class="h-1 w-full bg-primary/10 overflow-hidden"><div class="h-full bg-primary shadow-[0_0_10px_#00d9ff]" style="width: 90%"></div></div>
+<p class="text-[10px] text-on-surface-variant/60">React, Node.js, Tailwind, Next.js</p>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm uppercase"><span>System Scripting</span><span>85%</span></div>
+<div class="h-1 w-full bg-primary/10 overflow-hidden"><div class="h-full bg-primary shadow-[0_0_10px_#00d9ff]" style="width: 85%"></div></div>
+<p class="text-[10px] text-on-surface-variant/60">Python, Bash, Automation Tools</p>
+</div>
+</div>
+</div>
+<!-- Hardware Module -->
+<div class="os-module p-8 lg:p-12 border-tertiary/20">
+<div class="flex justify-between items-center mb-10">
+<h4 class="font-headline-md text-tertiary">HARDWARE_LAYER</h4>
+<span class="terminal-text text-tertiary">PHYSICAL_SYNCED</span>
+</div>
+<div class="space-y-8">
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm uppercase"><span>Embedded C++</span><span>95%</span></div>
+<div class="h-1 w-full bg-tertiary/10 overflow-hidden"><div class="h-full bg-tertiary shadow-[0_0_10px_#58ffad]" style="width: 95%"></div></div>
+<p class="text-[10px] text-on-surface-variant/60">Arduino, ESP32, STM32, ARM Architecture</p>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between font-label-sm uppercase"><span>PCB CAD Design</span><span>80%</span></div>
+<div class="h-1 w-full bg-tertiary/10 overflow-hidden"><div class="h-full bg-tertiary shadow-[0_0_10px_#58ffad]" style="width: 80%"></div></div>
+<p class="text-[10px] text-on-surface-variant/60">EasyEDA, Fusion 360, Circuit Design</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Media/YouTube Module -->
+<section class="py-section-padding px-gutter max-w-container-max mx-auto reveal" id="youtube">
+<div class="os-module p-0 md:p-1 lg:p-1 overflow-hidden">
+<div class="grid grid-cols-1 lg:grid-cols-12">
+<div class="lg:col-span-4 bg-primary/5 p-12 border-r border-primary/10 flex flex-col justify-center">
+<p class="terminal-text mb-6">MODULE_03: CONTENT_DISTRIBUTION</p>
+<h2 class="font-headline-lg text-on-background mb-6">SP-ThinkHub</h2>
+<p class="font-body-md text-on-surface-variant mb-10">
+                            Disseminating technical knowledge through high-fidelity visual documentation. Join thousands of builders worldwide.
+                        </p>
+<a class="magnetic inline-flex items-center gap-3 px-8 py-4 bg-[#FF0000] text-white font-label-md rounded-sm self-start hover:brightness-110 shadow-lg" href="#">
+<span class="material-symbols-outlined">subscriptions</span> SUBCRIBE.EXE
+                        </a>
+</div>
+<div class="lg:col-span-8 p-8 lg:p-12 grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="os-module p-4 group cursor-pointer border-white/5">
+<div class="glare"></div>
+<div class="aspect-video mb-4 overflow-hidden rounded-sm relative">
+<img alt="Video 1" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDoK-502LflUja7Qj9CIDJ5pp3dyRyskQ6wiCOEPlGFMsIoe8A9npHsIgFzsQ_4HLTXCMpL9k4lCdRuNafIR-hrS2gg6h1anfkguFlxAodMLDQLUzQtqY7pOMiiIxmjTd6o8nhHwBBBP873I_O4TYDSq0clBvo6nojoKdxtyMeyo6caWXB7_w_iGF5ic9LXdtHUv_KysYYa-qEA9Sf_dzvaBBcDN-xdp2a8teZL9OK8NFf-DdJ4dEDo"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-primary drop-shadow-[0_0_15px_rgba(0,217,255,0.8)]">play_circle</span>
+</div>
+</div>
+<h5 class="font-label-md text-on-background truncate">Mastering ESP32 Architecture</h5>
+<p class="terminal-text text-[10px] opacity-50 mt-1">LOAD_FILE: VID_001.mp4</p>
+</div>
+<div class="os-module p-4 group cursor-pointer border-white/5">
+<div class="glare"></div>
+<div class="aspect-video mb-4 overflow-hidden rounded-sm relative">
+<img alt="Video 2" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDss9F9Ixw6Rm9_6CcP0q6GZzbpeAzxKFU33TqMP7stR4cLQ9DvgXz5FNhyCemayjmhBzXhz_J-r6QcDDB04fUQye4pVYRJ4ZOUslDkIbu7fjnbvgwnE-Gtekog18rDugQHdczbfCYEu77tjxmTeFLhB-nlyAtNzuc99ZASvWnm3pjCSkRRIcSGC_kh2m3iTJhixlWQLESB7tjiqVJlsV5j2IhZ7ih-qh584_6Vi1IbODui4Q5xnZry"/>
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-6xl text-primary drop-shadow-[0_0_15px_rgba(0,217,255,0.8)]">play_circle</span>
+</div>
+</div>
+<h5 class="font-label-md text-on-background truncate">Web-to-Hardware Serial Bridges</h5>
+<p class="terminal-text text-[10px] opacity-50 mt-1">LOAD_FILE: VID_002.mp4</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact/Hire Section -->
+<section class="py-section-padding px-gutter max-w-container-max mx-auto text-center reveal" id="contact">
+<p class="terminal-text mb-6">MODULE_04: CONNECTION_INTERFACE</p>
+<h2 class="font-display-lg text-headline-lg mb-16">READY_FOR_<span class="text-primary">INITIATION?</span></h2>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="os-module p-8 px-12 group hover:scale-105 transition-transform flex items-center gap-4" href="mailto:contact@priyashan.com">
+<div class="glare"></div>
+<span class="material-symbols-outlined text-primary text-3xl">mail</span>
+<div class="text-left">
+<p class="terminal-text opacity-50">SMTP_TARGET</p>
+<p class="font-body-lg font-bold">contact@priyashan.com</p>
+</div>
+</a>
+<a class="os-module p-8 px-12 group hover:scale-105 transition-transform flex items-center gap-4 border-secondary/20" href="#">
+<div class="glare"></div>
+<span class="material-symbols-outlined text-secondary text-3xl">link</span>
+<div class="text-left">
+<p class="terminal-text text-secondary opacity-50">NET_NODE</p>
+<p class="font-body-lg font-bold">LinkedIn / Priyashan</p>
+</div>
+</a>
+</div>
+</section>
+</main>
+<!-- Footer / System Shutdown -->
+<footer class="relative mt-24 border-t border-primary/20 bg-surface-container-lowest/80 backdrop-blur-3xl overflow-hidden reveal">
+<div class="max-w-container-max mx-auto px-gutter py-24">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start mb-24">
+<div class="space-y-8">
+<h3 class="font-display-lg text-headline-lg text-primary tracking-tighter">PRIYASHAN<span class="text-white">.LOGS</span></h3>
+<div class="space-y-2 terminal-text opacity-40">
+<p>&gt; System shutdown initiated...</p>
+<p>&gt; Saving environment variables...</p>
+<p>&gt; Encrypting session data...</p>
+<p>&gt; Memory leak check: 0 errors</p>
+<p>&gt; Connection persistent on port 8080</p>
+</div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+<div class="space-y-4">
+<p class="terminal-text">ROOT_NAV</p>
+<div class="flex flex-col gap-2 font-label-sm text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">/home</a>
+<a class="hover:text-primary transition-colors" href="#">/projects</a>
+<a class="hover:text-primary transition-colors" href="#">/about</a>
+</div>
+</div>
+<div class="space-y-4">
+<p class="terminal-text">REMOTE_ADDR</p>
+<div class="flex flex-col gap-2 font-label-sm text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">LinkedIn</a>
+<a class="hover:text-primary transition-colors" href="#">GitHub</a>
+<a class="hover:text-primary transition-colors" href="#">Twitter</a>
+</div>
+</div>
+<div class="hidden md:block space-y-4">
+<p class="terminal-text">SYS_INFO</p>
+<div class="flex flex-col gap-2 font-label-sm text-on-surface-variant">
+<p>Build: 2024.11.05</p>
+<p>Loc: Global_Node</p>
+<p>Uptime: Active</p>
+</div>
+</div>
+</div>
+</div>
+<div class="flex flex-col md:flex-row justify-between items-center gap-6 pt-12 border-t border-white/5">
+<div class="font-label-sm text-on-surface-variant/40">
+                    © 2024 M.A.S. PRIYASHAN | END_OF_SESSION
+                </div>
+<div class="flex items-center gap-3 px-6 py-2 bg-black/40 border border-primary/20 rounded-full">
+<span class="status-dot bg-primary"></span>
+<span class="terminal-text uppercase">System Heartbeat: 64BPM / 102ms</span>
+</div>
+</div>
+</div>
+<!-- Decorative grid end -->
+<div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary to-transparent shadow-[0_0_20px_#00d9ff]"></div>
+</footer>
+<script>
+        // Custom cursor movement
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            document.documentElement.style.setProperty('--cursor-x', `${e.clientX}px`);
+            document.documentElement.style.setProperty('--cursor-y', `${e.clientY}px`);
+        });
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement, 
+                  b = document.body,
+                  st = 'scrollTop',
+                  sh = 'scrollHeight';
+            const percent = (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100;
+            document.getElementById('scroll-progress-bar').style.width = percent + '%';
+        });
+
+        // Intersection Observer for reveal animations
+        const revealCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        };
+        const observer = new IntersectionObserver(revealCallback, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Magnetic Hover Effect
+        document.querySelectorAll('.magnetic').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate(0px, 0px)`;
+            });
+        });
+
+        // Tilt effect for hero container
+        const heroTilt = document.getElementById('hero-tilt-container');
+        if(heroTilt) {
+            heroTilt.addEventListener('mousemove', (e) => {
+                const rect = heroTilt.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                heroTilt.style.transform = `perspective(1000px) rotateY(${x * 12}deg) rotateX(${y * -12}deg)`;
+            });
+            heroTilt.addEventListener('mouseleave', () => {
+                heroTilt.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg)`;
+            });
+        }
+
+        // Advanced Three.js Scene for Hero with Holographic Boxes
+        (function() {
+            const container = document.getElementById('threejs-container-HERO');
+            if(!container) return;
+            const width = container.clientWidth;
+            const height = container.clientHeight;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(50, width / height, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(width, height);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            const rootGroup = new THREE.Group();
+            scene.add(rootGroup);
+
+            const textureLoader = new THREE.TextureLoader();
+            
+            // Function to create a holographic framed box
+            function createHolographicBox(imageUrl, size, zOffset) {
+                const group = new THREE.Group();
+                group.position.z = zOffset;
+
+                // Load Image Plane
+                const imgTexture = textureLoader.load(imageUrl);
+                const imgGeo = new THREE.PlaneGeometry(size.w, size.h);
+                const imgMat = new THREE.MeshBasicMaterial({ 
+                    map: imgTexture, 
+                    transparent: true, 
+                    side: THREE.DoubleSide,
+                    opacity: 0.9
+                });
+                const imgMesh = new THREE.Mesh(imgGeo, imgMat);
+                group.add(imgMesh);
+
+                // Front & Back Wireframe Boxes
+                const boxGeo = new THREE.BoxGeometry(size.w * 1.1, size.h * 1.1, 0.2);
+                
+                // Front Frame
+                const frameMatFront = new THREE.MeshBasicMaterial({ 
+                    color: 0x00D9FF, 
+                    wireframe: true, 
+                    transparent: true, 
+                    opacity: 0.4 
+                });
+                const frameFront = new THREE.Mesh(boxGeo, frameMatFront);
+                frameFront.position.z = 0.1;
+                group.add(frameFront);
+
+                // Glowing Edges
+                const edges = new THREE.EdgesGeometry(boxGeo);
+                const edgeMat = new THREE.LineBasicMaterial({ color: 0x00D9FF, transparent: true, opacity: 0.8 });
+                const edgeLines = new THREE.LineSegments(edges, edgeMat);
+                edgeLines.position.z = 0.1;
+                group.add(edgeLines);
+
+                // Scanning Line Effect inside the frame
+                const scanGeo = new THREE.PlaneGeometry(size.w * 1.1, 0.05);
+                const scanMat = new THREE.MeshBasicMaterial({ color: 0x00D9FF, transparent: true, opacity: 0.5 });
+                const scanLine = new THREE.Mesh(scanGeo, scanMat);
+                scanLine.position.z = 0.11;
+                group.add(scanLine);
+                
+                return { group, scanLine };
+            }
+
+            // Create Main Portrait Box
+            const portrait = createHolographicBox("https://lh3.googleusercontent.com/aida-public/AB6AXuA8jWwo6sZCLtZ9Im8YVFKWNiOSaKy8NKxRHO7pvYWHrHALDQu_eJybigMqACZzjaJQ9JGRYKlgQo-ivtfjHlXQ_SVg19aBu1Ma1sM0qEUzT33rPM_aSVP9bUu2hwwdPhVqNNsJwG95B0CSKxbCjEA7yetsDj3e0wIqUIOn1yOa2b7q0Cu-C3cBq0RGjDaK-0DVE3XGDf8D37dnYgChtw1dwKgb5paOl-W1XJ2ZTngIRolDHH2kHV9Q5hdz9H0OcIXA9Q", { w: 3.5, h: 3.5 }, 0);
+            rootGroup.add(portrait.group);
+
+            // Create Floating Brand Logo Box (Smaller, offset)
+            const logo = createHolographicBox("https://lh3.googleusercontent.com/aida-public/AB6AXuCNLocCMbRndYevtME6X7d6oTAhLEzE5u5uvFJyQiJI6GoJmLP4jCM6Enhfmc1jbs1zsOokEiNqeYhLvjkTBR01znTkQ77qSeeaVAlVxcy14-1upMhlQAJRpjcvRo_qOy8EfpKDDgjhTpT2IMetNDLRnS5LFKTS5D1ZLgjCNtADrv9PGU7OBEU16VJk2Zs5pjm0E-oQPGnYYIHu0at88S664PZu5bxijM2iszqSodrMdm29_jxDL5AMfZ3eTcFJv1tCOg", { w: 1.2, h: 1.2 }, 0.5);
+            logo.group.position.set(1.5, -1.8, 0.8);
+            rootGroup.add(logo.group);
+
+            // Tech particles in background
+            const particles = new THREE.BufferGeometry();
+            const pCount = 200;
+            const pPos = new Float32Array(pCount * 3);
+            for(let i=0; i<pCount*3; i++) pPos[i] = (Math.random() - 0.5) * 8;
+            particles.setAttribute('position', new THREE.BufferAttribute(pPos, 3));
+            const pMat = new THREE.PointsMaterial({ color: 0x00D9FF, size: 0.015, transparent: true, opacity: 0.5 });
+            const pSystem = new THREE.Points(particles, pMat);
+            rootGroup.add(pSystem);
+
+            // Lighting
+            const light = new THREE.PointLight(0x00D9FF, 1.5, 50);
+            light.position.set(0, 0, 5);
+            scene.add(light);
+            scene.add(new THREE.AmbientLight(0xffffff, 0.4));
+
+            camera.position.z = 7;
+
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.01;
+
+                // Subtle float
+                portrait.group.position.y = Math.sin(time * 0.5) * 0.1;
+                logo.group.position.y = -1.8 + Math.cos(time * 0.7) * 0.15;
+                
+                // Rotation for depth
+                rootGroup.rotation.y = Math.sin(time * 0.2) * 0.05;
+
+                // Scan lines movement
+                portrait.scanLine.position.y = Math.sin(time * 2) * 1.8;
+                logo.scanLine.position.y = Math.cos(time * 3) * 0.6;
+
+                pSystem.rotation.y += 0.001;
+                
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                const w = container.clientWidth;
+                const h = container.clientHeight;
+                renderer.setSize(w, h);
+                camera.aspect = w / h;
+                camera.updateProjectionMatrix();
+            });
+        })();
+    </script>
+</body></html>
